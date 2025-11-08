@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selenium Hands-On Lab</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        p, li {
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block code {
+            color: #f8f8f2;
+        }
+
+        .keyword { color: #ff79c6; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .function { color: #50fa7b; }
+
+        .exercise-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea40;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .exercise-card h3 {
+            margin-top: 0;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .difficulty.easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty.medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty.hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff8e1;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checklist li {
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-size: 1.3em;
+            color: #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Selenium Hands-On Lab</h1>
+            <p>Complete Practical Training Guide</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('setup')">Setup</button>
+            <button class="tab-button" onclick="showTab('basics')">Basics</button>
+            <button class="tab-button" onclick="showTab('exercises')">Exercises</button>
+            <button class="tab-button" onclick="showTab('advanced')">Advanced</button>
+            <button class="tab-button" onclick="showTab('project')">Final Project</button>
+        </div>
+
+        <!-- Tab 1: Setup -->
+        <div id="setup" class="tab-content active">
+            <div class="section">
+                <h2>Lab Setup & Prerequisites</h2>
+                
+                <h3>🎯 Lab Objectives</h3>
+                <p>By the end of this lab, you will be able to:</p>
+                <ul>
+                    <li>Install and configure Selenium WebDriver</li>
+                    <li>Write basic to advanced test automation scripts</li>
+                    <li>Interact with web elements using different locators</li>
+                    <li>Handle dynamic content and waits</li>
+                    <li>Implement Page Object Model pattern</li>
+                    <li>Build a complete test automation framework</li>
+                </ul>
+
+                <h3>📋 Prerequisites</h3>
+                <ul class="checklist">
+                    <li>Python 3.7+ or Java 8+ installed</li>
+                    <li>Basic programming knowledge</li>
+                    <li>Chrome or Firefox browser installed</li>
+                    <li>Text editor or IDE (VS Code, PyCharm, Eclipse)</li>
+                    <li>Internet connection for downloading packages</li>
+                </ul>
+
+                <h3>🔧 Installation Steps</h3>
+                
+                <h4><span class="step-number">1</span>Install Python (if not already installed)</h4>
+                <p>Download from <a href="https://www.python.org/downloads/" target="_blank">python.org</a> and verify installation:</p>
+                <div class="code-block">
+<span class="comment"># Check Python version</span>
+python --version
+<span class="comment"># or</span>
+python3 --version
+                </div>
+
+                <h4><span class="step-number">2</span>Install Selenium WebDriver</h4>
+                <div class="code-block">
+<span class="comment"># Using pip</span>
+pip install selenium
+
+<span class="comment"># Verify installation</span>
+pip show selenium
+                </div>
+
+                <h4><span class="step-number">3</span>Install Browser Driver</h4>
+                <p>Option A: Using WebDriver Manager (Recommended)</p>
+                <div class="code-block">
+pip install webdriver-manager
+                </div>
+
+                <p>Option B: Manual Download</p>
+                <ul>
+                    <li><strong>ChromeDriver:</strong> <a href="https://chromedriver.chromium.org/" target="_blank">chromedriver.chromium.org</a></li>
+                    <li><strong>GeckoDriver (Firefox):</strong> <a href="https://github.com/mozilla/geckodriver/releases" target="_blank">github.com/mozilla/geckodriver</a></li>
+                </ul>
+
+                <h4><span class="step-number">4</span>Verify Installation</h4>
+                <p>Create a file named <code>test_setup.py</code>:</p>
+                <div class="code-block">
+<span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver
+<span class="keyword">from</span> webdriver_manager.chrome <span class="keyword">import</span> ChromeDriverManager
+<span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service
+
+<span class="comment"># Initialize driver</span>
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+
+<span class="comment"># Test navigation</span>
+driver.get(<span class="string">"https://www.google.com"</span>)
+<span class="function">print</span>(<span class="string">"Page Title:"</span>, driver.title)
+
+<span class="comment"># Close browser</span>
+driver.quit()
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Success!</strong> If you see "Page Title: Google" printed, your setup is complete!
+                </div>
+
+                <h3>📁 Lab File Structure</h3>
+                <p>Create the following folder structure for your lab:</p>
+                <div class="code-block">
+selenium_lab/
+│
+├── tests/
+│   ├── test_basics.py
+│   ├── test_locators.py
+│   └── test_advanced.py
+│
+├── pages/
+│   └── (Page Object Model classes)
+│
+├── utils/
+│   └── helpers.py
+│
+├── reports/
+│   └── (Test reports will be saved here)
+│
+└── requirements.txt
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Basics -->
+        <div id="basics" class="tab-content">
+            <div class="section">
+                <h2>Selenium Basics</h2>
+
+                <h3>1. Browser Initialization</h3>
+                <div class="code-block">
+<span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver
+<span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service
+<span class="keyword">from</span> webdriver_manager.chrome <span class="keyword">import</span> ChromeDriverManager
+
+<span class="comment"># Method 1: Using WebDriver Manager</span>
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+
+<span class="comment"># Method 2: Firefox</span>
+<span class="keyword">from</span> webdriver_manager.firefox <span class="keyword">import</span> GeckoDriverManager
+service = Service(GeckoDriverManager().install())
+driver = webdriver.Firefox(service=service)
+
+<span class="comment"># Method 3: Headless mode (no GUI)</span>
+<span class="keyword">from</span> selenium.webdriver.chrome.options <span class="keyword">import</span> Options
+options = Options()
+options.add_argument(<span class="string">'--headless'</span>)
+driver = webdriver.Chrome(service=service, options=options)
+                </div>
+
+                <h3>2. Basic Navigation</h3>
+                <div class="code-block">
+<span class="comment"># Navigate to URL</span>
+driver.get(<span class="string">"https://www.example.com"</span>)
+
+<span class="comment"># Get current URL</span>
+current_url = driver.current_url
+<span class="function">print</span>(current_url)
+
+<span class="comment"># Get page title</span>
+title = driver.title
+<span class="function">print</span>(title)
+
+<span class="comment"># Browser navigation</span>
+driver.back()      <span class="comment"># Go back</span>
+driver.forward()   <span class="comment"># Go forward</span>
+driver.refresh()   <span class="comment"># Refresh page</span>
+
+<span class="comment"># Close browser</span>
+driver.quit()      <span class="comment"># Closes all windows</span>
+<span class="comment"># driver.close()  # Closes current window only</span>
+                </div>
+
+                <h3>3. Locator Strategies</h3>
+                <p>Selenium provides 8 different ways to locate elements:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Locator</th>
+                            <th>Syntax</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ID</td>
+                            <td>By.ID</td>
+                            <td>driver.find_element(By.ID, "username")</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>By.NAME</td>
+                            <td>driver.find_element(By.NAME, "email")</td>
+                        </tr>
+                        <tr>
+                            <td>Class Name</td>
+                            <td>By.CLASS_NAME</td>
+                            <td>driver.find_element(By.CLASS_NAME, "btn")</td>
+                        </tr>
+                        <tr>
+                            <td>Tag Name</td>
+                            <td>By.TAG_NAME</td>
+                            <td>driver.find_element(By.TAG_NAME, "h1")</td>
+                        </tr>
+                        <tr>
+                            <td>Link Text</td>
+                            <td>By.LINK_TEXT</td>
+                            <td>driver.find_element(By.LINK_TEXT, "Click Here")</td>
+                        </tr>
+                        <tr>
+                            <td>Partial Link Text</td>
+                            <td>By.PARTIAL_LINK_TEXT</td>
+                            <td>driver.find_element(By.PARTIAL_LINK_TEXT, "Click")</td>
+                        </tr>
+                        <tr>
+                            <td>CSS Selector</td>
+                            <td>By.CSS_SELECTOR</td>
+                            <td>driver.find_element(By.CSS_SELECTOR, ".btn-primary")</td>
+                        </tr>
+                        <tr>
+                            <td>XPath</td>
+                            <td>By.XPATH</td>
+                            <td>driver.find_element(By.XPATH, "//input[@id='username']")</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By
+
+<span class="comment"># Find single element</span>
+element = driver.find_element(By.ID, <span class="string">"search"</span>)
+
+<span class="comment"># Find multiple elements</span>
+elements = driver.find_elements(By.CLASS_NAME, <span class="string">"item"</span>)
+
+<span class="comment"># CSS Selector examples</span>
+driver.find_element(By.CSS_SELECTOR, <span class="string">"#username"</span>)          <span class="comment"># by ID</span>
+driver.find_element(By.CSS_SELECTOR, <span class="string">".form-control"</span>)     <span class="comment"># by class</span>
+driver.find_element(By.CSS_SELECTOR, <span class="string">"input[name='email']"</span>) <span class="comment"># by attribute</span>
+
+<span class="comment"># XPath examples</span>
+driver.find_element(By.XPATH, <span class="string">"//input[@id='username']"</span>)
+driver.find_element(By.XPATH, <span class="string">"//button[text()='Submit']"</span>)
+driver.find_element(By.XPATH, <span class="string">"//div[@class='container']/p[1]"</span>)
+                </div>
+
+                <h3>4. Interacting with Elements</h3>
+                <div class="code-block">
+<span class="comment"># Click element</span>
+button = driver.find_element(By.ID, <span class="string">"submit-btn"</span>)
+button.click()
+
+<span class="comment"># Type text</span>
+input_field = driver.find_element(By.NAME, <span class="string">"username"</span>)
+input_field.send_keys(<span class="string">"testuser"</span>)
+
+<span class="comment"># Clear text</span>
+input_field.clear()
+
+<span class="comment"># Get text from element</span>
+text = driver.find_element(By.TAG_NAME, <span class="string">"h1"</span>).text
+<span class="function">print</span>(text)
+
+<span class="comment"># Get attribute value</span>
+href = driver.find_element(By.LINK_TEXT, <span class="string">"Home"</span>).get_attribute(<span class="string">"href"</span>)
+
+<span class="comment"># Check if element is displayed/enabled/selected</span>
+is_displayed = element.is_displayed()
+is_enabled = element.is_enabled()
+is_selected = element.is_selected()  <span class="comment"># For checkboxes/radio buttons</span>
+                </div>
+
+                <h3>5. Waits (Critical!)</h3>
+                <div class="info-box">
+                    <strong>💡 Important:</strong> Always use waits instead of time.sleep() to make tests robust and faster!
+                </div>
+
+                <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.support.ui <span class="keyword">import</span> WebDriverWait
+<span class="keyword">from</span> selenium.webdriver.support <span class="keyword">import</span> expected_conditions <span class="keyword">as</span> EC
+
+<span class="comment"># Implicit Wait (applies to all find_element calls)</span>
+driver.implicitly_wait(10)  <span class="comment"># wait up to 10 seconds</span>
+
+<span class="comment"># Explicit Wait (recommended)</span>
+wait = WebDriverWait(driver, 10)
+
+<span class="comment"># Wait for element to be clickable</span>
+element = wait.until(EC.element_to_be_clickable((By.ID, <span class="string">"submit"</span>)))
+element.click()
+
+<span class="comment"># Wait for element to be visible</span>
+element = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, <span class="string">"result"</span>)))
+
+<span class="comment"># Wait for element to be present</span>
+element = wait.until(EC.presence_of_element_located((By.XPATH, <span class="string">"//div[@id='content']"</span>)))
+
+<span class="comment"># Wait for title to contain text</span>
+wait.until(EC.title_contains(<span class="string">"Dashboard"</span>))
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Exercises -->
+        <div id="exercises" class="tab-content">
+            <div class="section">
+                <h2>Practical Exercises</h2>
+
+                <div class="exercise-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Exercise 1: Google Search Test</h3>
+                    <h4>Objective:</h4>
+                    <p>Automate a Google search and verify results appear</p>
+                    
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Open Google homepage</li>
+                        <li>Locate the search box</li>
+                        <li>Enter "Selenium WebDriver" and submit</li>
+                        <li>Wait for results to load</li>
+                        <li>Verify page title contains "Selenium WebDriver"</li>
+                        <li>Print the number of search results</li>
+                    </ol>
+
+                    <h4>Solution Template:</h4>
+                    <div class="code-block">
+<span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver
+<span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By
+<span class="keyword">from</span> selenium.webdriver.common.keys <span class="keyword">import</span> Keys
+<span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service
+<span class="keyword">from</span> webdriver_manager.chrome <span class="keyword">import</span> ChromeDriverManager
+<span class="keyword">import</span> time
+
+<span class="comment"># Initialize driver</span>
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+
+<span class="keyword">try</span>:
+    <span class="comment"># Navigate to Google</span>
+    driver.get(<span class="string">"https://www.google.com"</span>)
+    
+    <span class="comment"># TODO: Find search box and enter search term</span>
+    search_box = driver.find_element(By.NAME, <span class="string">"q"</span>)
+    search_box.send_keys(<span class="string">"Selenium WebDriver"</span>)
+    search_box.send_keys(Keys.RETURN)
+    
+    <span class="comment"># TODO: Wait and verify results</span>
+    time.sleep(2)
+    <span class="function">assert</span> <span class="string">"Selenium WebDriver"</span> <span class="keyword">in</span> driver.title
+    
+    <span class="function">print</span>(<span class="string">"Test Passed!"</span>)
+
+<span class="keyword">finally</span>:
+    driver.quit()
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Exercise 2: Form Filling</h3>
+                    <h4>Objective:</h4>
+                    <p>Practice interacting with form elements</p>
+                    
+                    <h4>Test Website:</h4>
+                    <p>Use: <a href="https://www.selenium.dev/selenium/web/web-form.html" target="_blank">https://www.selenium.dev/selenium/web/web-form.html</a></p>
+                    
+                    <h4>Tasks:</h4>
+                    <ol>
+                        <li>Fill in the text input field</li>
+                        <li>Enter password in password field</li>
+                        <li>Enter text in textarea</li>
+                        <li>Select an option from dropdown</li>
+                        <li>Click checkbox</li>
+                        <li>Click submit button</li>
+                        <li>Verify success message</li>
+                    </ol>
+
+                    <h4>Hint:</h4>
+                    <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.support.ui <span class="keyword">import</span> Select
+
+<span class="comment"># For dropdown selection</span>
+dropdown = Select(driver.find_element(By.NAME, <span class="string">"dropdown"</span>))
+dropdown.select_by_visible_text(<span class="string">"Option 2"</span>)
+<span class="comment"># OR</span>
+dropdown.select_by_value(<span class="string">"2"</span>)
+<span class="comment"># OR</span>
+dropdown.select_by_index(1)
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Exercise 3: Dynamic Content Handling</h3>
+                    <h4>Objective:</h4>
+                    <p>Learn to handle dynamically loaded content using explicit waits</p>
+                    
+                    <h4>Test Website:</h4>
+                    <p>Use: <a href="https://the-internet.herokuapp.com/dynamic_loading/2" target="_blank">https://the-internet.herokuapp.com/dynamic_loading/2</a></p>
+                    
+                    <h4>Tasks:</h4>
+                    <ol>
+                        <li>Click the "Start" button</li>
+                        <li>Wait for loading bar to disappear</li>
+                        <li>Wait for text "Hello World!" to appear</li>
+                        <li>Verify the text is displayed</li>
+                        <li>Print the text</li>
+                    </ol>
+
+                    <h4>Solution Template:</h4>
+                    <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.support.ui <span class="keyword">import</span> WebDriverWait
+<span class="keyword">from</span> selenium.webdriver.support <span class="keyword">import</span> expected_conditions <span class="keyword">as</span> EC
+
+driver.get(<span class="string">"https://the-internet.herokuapp.com/dynamic_loading/2"</span>)
+
+<span class="comment"># Click start button</span>
+start_button = driver.find_element(By.CSS_SELECTOR, <span class="string">"#start button"</span>)
+start_button.click()
+
+<span class="comment"># Wait for element to be visible</span>
+wait = WebDriverWait(driver, 10)
+finish_element = wait.until(
+    EC.visibility_of_element_located((By.CSS_SELECTOR, <span class="string">"#finish"</span>))
+)
+
+<span class="comment"># Verify and print text</span>
+<span class="function">print</span>(finish_element.text)
+<span class="function">assert</span> finish_element.text == <span class="string">"Hello World!"</span>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Exercise 4: Multiple Windows/Tabs</h3>
+                    <h4>Objective:</h4>
+                    <p>Learn to switch between browser windows and tabs</p>
+                    
+                    <h4>Test Website:</h4>
+                    <p>Use: <a href="https://the-internet.herokuapp.com/windows" target="_blank">https://the-internet.herokuapp.com/windows</a></p>
+                    
+                    <h4>Tasks:</h4>
+                    <ol>
+                        <li>Click "Click Here" to open new window</li>
+                        <li>Switch to the new window</li>
+                        <li>Verify the text "New Window"</li>
+                        <li>Switch back to original window</li>
+                        <li>Verify original page title</li>
+                    </ol>
+
+                    <h4>Solution Template:</h4>
+                    <div class="code-block">
+<span class="comment"># Store original window handle</span>
+original_window = driver.current_window_handle
+
+<span class="comment"># Click link to open new window</span>
+driver.find_element(By.LINK_TEXT, <span class="string">"Click Here"</span>).click()
+
+<span class="comment"># Wait for new window and switch</span>
+wait.until(EC.number_of_windows_to_be(2))
+<span class="keyword">for</span> window_handle <span class="keyword">in</span> driver.window_handles:
+    <span class="keyword">if</span> window_handle != original_window:
+        driver.switch_to.window(window_handle)
+        <span class="keyword">break</span>
+
+<span class="comment"># Verify new window content</span>
+<span class="function">assert</span> <span class="string">"New Window"</span> <span class="keyword">in</span> driver.page_source
+
+<span class="comment"># Close new window and switch back</span>
+driver.close()
+driver.switch_to.window(original_window)
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Exercise 5: Table Data Extraction</h3>
+                    <h4>Objective:</h4>
+                    <p>Extract and process data from HTML tables</p>
+                    
+                    <h4>Test Website:</h4>
+                    <p>Use: <a href="https://the-internet.herokuapp.com/tables" target="_blank">https://the-internet.herokuapp.com/tables</a></p>
+                    
+                    <h4>Tasks:</h4>
+                    <ol>
+                        <li>Navigate to the tables page</li>
+                        <li>Extract all data from Table 1</li>
+                        <li>Find the person with the highest due amount</li>
+                        <li>Print all email addresses</li>
+                        <li>Count total number of rows</li>
+                    </ol>
+
+                    <h4>Solution Template:</h4>
+                    <div class="code-block">
+<span class="comment"># Get all rows from table</span>
+rows = driver.find_elements(By.CSS_SELECTOR, <span class="string">"#table1 tbody tr"</span>)
+
+<span class="comment"># Extract data from each row</span>
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    cells = row.find_elements(By.TAG_NAME, <span class="string">"td"</span>)
+    last_name = cells[0].text
+    first_name = cells[1].text
+    email = cells[2].text
+    due = cells[3].text
+    
+    <span class="function">print</span>(<span class="string">f"<span class="keyword">{</span>first_name<span class="keyword">}</span> <span class="keyword">{</span>last_name<span class="keyword">}</span>: <span class="keyword">{</span>email<span class="keyword">}</span> - Due: <span class="keyword">{</span>due<span class="keyword">}</span>"</span>)
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Exercise 6: File Upload</h3>
+                    <h4>Objective:</h4>
+                    <p>Handle file upload functionality</p>
+                    
+                    <h4>Test Website:</h4>
+                    <p>Use: <a href="https://the-internet.herokuapp.com/upload" target="_blank">https://the-internet.herokuapp.com/upload</a></p>
+                    
+                    <h4>Tasks:</h4>
+                    <ol>
+                        <li>Create a test file on your system</li>
+                        <li>Use send_keys() to upload the file</li>
+                        <li>Click the upload button</li>
+                        <li>Verify the file was uploaded successfully</li>
+                    </ol>
+
+                    <h4>Hint:</h4>
+                    <div class="code-block">
+<span class="keyword">import</span> os
+
+<span class="comment"># Create test file</span>
+file_path = os.path.abspath(<span class="string">"test_file.txt"</span>)
+<span class="keyword">with</span> <span class="function">open</span>(file_path, <span class="string">"w"</span>) <span class="keyword">as</span> f:
+    f.write(<span class="string">"Test content"</span>)
+
+<span class="comment"># Upload file</span>
+upload_element = driver.find_element(By.ID, <span class="string">"file-upload"</span>)
+upload_element.send_keys(file_path)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Advanced -->
+        <div id="advanced" class="tab-content">
+            <div class="section">
+                <h2>Advanced Topics</h2>
+
+                <h3>1. Screenshots & Debugging</h3>
+                <div class="code-block">
+<span class="comment"># Take screenshot</span>
+driver.save_screenshot(<span class="string">"screenshot.png"</span>)
+
+<span class="comment"># Take screenshot of specific element</span>
+element = driver.find_element(By.ID, <span class="string">"header"</span>)
+element.screenshot(<span class="string">"element.png"</span>)
+
+<span class="comment"># Get page source</span>
+page_source = driver.page_source
+<span class="function">print</span>(page_source)
+
+<span class="comment"># Execute JavaScript</span>
+driver.execute_script(<span class="string">"window.scrollTo(0, document.body.scrollHeight);"</span>)
+
+<span class="comment"># Get element properties via JS</span>
+element = driver.find_element(By.ID, <span class="string">"myElement"</span>)
+inner_html = driver.execute_script(<span class="string">"return arguments[0].innerHTML;"</span>, element)
+                </div>
+
+                <h3>2. Handling Alerts & Pop-ups</h3>
+                <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.common.alert <span class="keyword">import</span> Alert
+
+<span class="comment"># Click button that triggers alert</span>
+driver.find_element(By.ID, <span class="string">"alert-button"</span>).click()
+
+<span class="comment"># Switch to alert</span>
+alert = driver.switch_to.alert
+
+<span class="comment"># Get alert text</span>
+alert_text = alert.text
+<span class="function">print</span>(alert_text)
+
+<span class="comment"># Accept alert (click OK)</span>
+alert.accept()
+
+<span class="comment"># Dismiss alert (click Cancel)</span>
+<span class="comment"># alert.dismiss()</span>
+
+<span class="comment"># Send text to prompt</span>
+<span class="comment"># alert.send_keys("test input")</span>
+                </div>
+
+                <h3>3. Handling Frames & iFrames</h3>
+                <div class="code-block">
+<span class="comment"># Switch to frame by index</span>
+driver.switch_to.frame(0)
+
+<span class="comment"># Switch to frame by name or id</span>
+driver.switch_to.frame(<span class="string">"iframe-name"</span>)
+
+<span class="comment"># Switch to frame by WebElement</span>
+iframe = driver.find_element(By.CSS_SELECTOR, <span class="string">"iframe.my-frame"</span>)
+driver.switch_to.frame(iframe)
+
+<span class="comment"># Switch back to main content</span>
+driver.switch_to.default_content()
+
+<span class="comment"># Switch to parent frame</span>
+driver.switch_to.parent_frame()
+                </div>
+
+                <h3>4. Mouse Actions</h3>
+                <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.common.action_chains <span class="keyword">import</span> ActionChains
+
+actions = ActionChains(driver)
+
+<span class="comment"># Hover over element</span>
+element = driver.find_element(By.ID, <span class="string">"menu"</span>)
+actions.move_to_element(element).perform()
+
+<span class="comment"># Double click</span>
+actions.double_click(element).perform()
+
+<span class="comment"># Right click</span>
+actions.context_click(element).perform()
+
+<span class="comment"># Drag and drop</span>
+source = driver.find_element(By.ID, <span class="string">"source"</span>)
+target = driver.find_element(By.ID, <span class="string">"target"</span>)
+actions.drag_and_drop(source, target).perform()
+
+<span class="comment"># Chain multiple actions</span>
+actions.move_to_element(element).click().send_keys(<span class="string">"text"</span>).perform()
+                </div>
+
+                <h3>5. Keyboard Actions</h3>
+                <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.common.keys <span class="keyword">import</span> Keys
+
+element = driver.find_element(By.ID, <span class="string">"input"</span>)
+
+<span class="comment"># Press Enter</span>
+element.send_keys(Keys.RETURN)
+
+<span class="comment"># Press Tab</span>
+element.send_keys(Keys.TAB)
+
+<span class="comment"># Keyboard shortcuts (Ctrl+A, Ctrl+C)</span>
+element.send_keys(Keys.CONTROL, <span class="string">"a"</span>)
+element.send_keys(Keys.CONTROL, <span class="string">"c"</span>)
+
+<span class="comment"># Multiple keys</span>
+element.send_keys(Keys.SHIFT, <span class="string">"hello"</span>)  <span class="comment"># Types HELLO</span>
+                </div>
+
+                <h3>6. Page Object Model (POM)</h3>
+                <p>Best practice for organizing test code:</p>
+                
+                <h4>login_page.py</h4>
+                <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By
+
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="comment"># Locators</span>
+    USERNAME_INPUT = (By.ID, <span class="string">"username"</span>)
+    PASSWORD_INPUT = (By.ID, <span class="string">"password"</span>)
+    LOGIN_BUTTON = (By.CSS_SELECTOR, <span class="string">"button[type='submit']"</span>)
+    ERROR_MESSAGE = (By.CLASS_NAME, <span class="string">"error"</span>)
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, driver):
+        <span class="keyword">self</span>.driver = driver
+    
+    <span class="keyword">def</span> <span class="function">enter_username</span>(<span class="keyword">self</span>, username):
+        <span class="keyword">self</span>.driver.find_element(*<span class="keyword">self</span>.USERNAME_INPUT).send_keys(username)
+    
+    <span class="keyword">def</span> <span class="function">enter_password</span>(<span class="keyword">self</span>, password):
+        <span class="keyword">self</span>.driver.find_element(*<span class="keyword">self</span>.PASSWORD_INPUT).send_keys(password)
+    
+    <span class="keyword">def</span> <span class="function">click_login</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.driver.find_element(*<span class="keyword">self</span>.LOGIN_BUTTON).click()
+    
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, username, password):
+        <span class="keyword">self</span>.enter_username(username)
+        <span class="keyword">self</span>.enter_password(password)
+        <span class="keyword">self</span>.click_login()
+    
+    <span class="keyword">def</span> <span class="function">get_error_message</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="keyword">self</span>.driver.find_element(*<span class="keyword">self</span>.ERROR_MESSAGE).text
+                </div>
+
+                <h4>test_login.py</h4>
+                <div class="code-block">
+<span class="keyword">from</span> login_page <span class="keyword">import</span> LoginPage
+
+<span class="keyword">def</span> <span class="function">test_valid_login</span>():
+    driver.get(<span class="string">"https://example.com/login"</span>)
+    login_page = LoginPage(driver)
+    
+    login_page.login(<span class="string">"user@test.com"</span>, <span class="string">"password123"</span>)
+    
+    <span class="comment"># Verify successful login</span>
+    <span class="function">assert</span> <span class="string">"Dashboard"</span> <span class="keyword">in</span> driver.title
+                </div>
+
+                <h3>7. Data-Driven Testing</h3>
+                <div class="code-block">
+<span class="keyword">import</span> pytest
+
+<span class="comment"># Test data</span>
+test_data = [
+    (<span class="string">"user1@test.com"</span>, <span class="string">"pass123"</span>, <span class="string">True</span>),
+    (<span class="string">"user2@test.com"</span>, <span class="string">"pass456"</span>, <span class="string">True</span>),
+    (<span class="string">"invalid@test.com"</span>, <span class="string">"wrong"</span>, <span class="string">False</span>),
+]
+
+<span class="comment">@pytest.mark.parametrize("username,password,should_succeed", test_data)</span>
+<span class="keyword">def</span> <span class="function">test_login_scenarios</span>(username, password, should_succeed):
+    login_page = LoginPage(driver)
+    login_page.login(username, password)
+    
+    <span class="keyword">if</span> should_succeed:
+        <span class="function">assert</span> <span class="string">"Dashboard"</span> <span class="keyword">in</span> driver.title
+    <span class="keyword">else</span>:
+        <span class="function">assert</span> login_page.get_error_message()
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Final Project -->
+        <div id="project" class="tab-content">
+            <div class="section">
+                <h2>Final Project: E-Commerce Test Suite</h2>
+
+                <div class="info-box">
+                    <h3>🎯 Project Overview</h3>
+                    <p>Build a complete test automation framework for an e-commerce website using Selenium and the Page Object Model pattern.</p>
+                </div>
+
+                <h3>Project Requirements</h3>
+                
+                <h4>Test Website:</h4>
+                <p>Use: <a href="https://www.saucedemo.com/" target="_blank">https://www.saucedemo.com/</a></p>
+                <p><strong>Test Credentials:</strong></p>
+                <ul>
+                    <li>Username: standard_user</li>
+                    <li>Password: secret_sauce</li>
+                </ul>
+
+                <h3>Test Scenarios to Automate</h3>
+
+                <div class="exercise-card">
+                    <h4>Test Suite 1: Login Functionality</h4>
+                    <ul class="checklist">
+                        <li>Test successful login with valid credentials</li>
+                        <li>Test login with invalid username</li>
+                        <li>Test login with invalid password</li>
+                        <li>Test login with empty fields</li>
+                        <li>Verify error messages are displayed correctly</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-card">
+                    <h4>Test Suite 2: Product Catalog</h4>
+                    <ul class="checklist">
+                        <li>Verify all products are displayed</li>
+                        <li>Test sorting products (A-Z, Z-A, Price low-high, high-low)</li>
+                        <li>Verify product details (name, price, image)</li>
+                        <li>Test "Add to Cart" functionality</li>
+                        <li>Verify cart badge updates correctly</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-card">
+                    <h4>Test Suite 3: Shopping Cart</h4>
+                    <ul class="checklist">
+                        <li>Add multiple items to cart</li>
+                        <li>Verify cart displays correct items</li>
+                        <li>Remove items from cart</li>
+                        <li>Verify cart count updates</li>
+                        <li>Test "Continue Shopping" button</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-card">
+                    <h4>Test Suite 4: Checkout Process</h4>
+                    <ul class="checklist">
+                        <li>Complete checkout with valid information</li>
+                        <li>Verify order summary is correct</li>
+                        <li>Test checkout form validation</li>
+                        <li>Verify order confirmation message</li>
+                        <li>Test "Cancel" functionality</li>
+                    </ul>
+                </div>
+
+                <h3>Project Structure</h3>
+                <div class="code-block">
+ecommerce_test_project/
+│
+├── pages/
+│   ├── __init__.py
+│   ├── base_page.py
+│   ├── login_page.py
+│   ├── products_page.py
+│   ├── cart_page.py
+│   └── checkout_page.py
+│
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py
+│   ├── test_login.py
+│   ├── test_products.py
+│   ├── test_cart.py
+│   └── test_checkout.py
+│
+├── utils/
+│   ├── __init__.py
+│   └── test_data.py
+│
+├── reports/
+│   └── (test reports)
+│
+├── screenshots/
+│   └── (failure screenshots)
+│
+├── requirements.txt
+└── pytest.ini
+                </div>
+
+                <h3>Starter Code</h3>
+
+                <h4>requirements.txt</h4>
+                <div class="code-block">
+selenium==4.15.0
+webdriver-manager==4.0.1
+pytest==7.4.3
+pytest-html==4.1.1
+                </div>
+
+                <h4>conftest.py (Pytest Fixtures)</h4>
+                <div class="code-block">
+<span class="keyword">import</span> pytest
+<span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver
+<span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service
+<span class="keyword">from</span> webdriver_manager.chrome <span class="keyword">import</span> ChromeDriverManager
+
+<span class="comment">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">driver</span>():
+    <span class="string">"""Setup and teardown for WebDriver"""</span>
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service)
+    driver.maximize_window()
+    driver.implicitly_wait(10)
+    
+    <span class="keyword">yield</span> driver
+    
+    driver.quit()
+
+<span class="comment">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">logged_in_driver</span>(driver):
+    <span class="string">"""Fixture for tests that require login"""</span>
+    <span class="keyword">from</span> pages.login_page <span class="keyword">import</span> LoginPage
+    
+    driver.get(<span class="string">"https://www.saucedemo.com"</span>)
+    login_page = LoginPage(driver)
+    login_page.login(<span class="string">"standard_user"</span>, <span class="string">"secret_sauce"</span>)
+    
+    <span class="keyword">return</span> driver
+                </div>
+
+                <h4>base_page.py</h4>
+                <div class="code-block">
+<span class="keyword">from</span> selenium.webdriver.support.ui <span class="keyword">import</span> WebDriverWait
+<span class="keyword">from</span> selenium.webdriver.support <span class="keyword">import</span> expected_conditions <span class="keyword">as</span> EC
+
+<span class="keyword">class</span> <span class="function">BasePage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, driver):
+        <span class="keyword">self</span>.driver = driver
+        <span class="keyword">self</span>.wait = WebDriverWait(driver, 10)
+    
+    <span class="keyword">def</span> <span class="function">find_element</span>(<span class="keyword">self</span>, locator):
+        <span class="keyword">return</span> <span class="keyword">self</span>.wait.until(EC.presence_of_element_located(locator))
+    
+    <span class="keyword">def</span> <span class="function">find_elements</span>(<span class="keyword">self</span>, locator):
+        <span class="keyword">return</span> <span class="keyword">self</span>.wait.until(EC.presence_of_all_elements_located(locator))
+    
+    <span class="keyword">def</span> <span class="function">click</span>(<span class="keyword">self</span>, locator):
+        element = <span class="keyword">self</span>.wait.until(EC.element_to_be_clickable(locator))
+        element.click()
+    
+    <span class="keyword">def</span> <span class="function">enter_text</span>(<span class="keyword">self</span>, locator, text):
+        element = <span class="keyword">self</span>.find_element(locator)
+        element.clear()
+        element.send_keys(text)
+    
+    <span class="keyword">def</span> <span class="function">get_text</span>(<span class="keyword">self</span>, locator):
+        <span class="keyword">return</span> <span class="keyword">self</span>.find_element(locator).text
+                </div>
+
+                <h3>Success Criteria</h3>
+                <div class="success-box">
+                    <h4>Your project should:</h4>
+                    <ul class="checklist">
+                        <li>Use Page Object Model pattern</li>
+                        <li>Have at least 15 test cases</li>
+                        <li>Use explicit waits (no time.sleep())</li>
+                        <li>Include proper assertions</li>
+                        <li>Take screenshots on failures</li>
+                        <li>Generate HTML test reports</li>
+                        <li>Have clean, documented code</li>
+                        <li>All tests should pass</li>
+                    </ul>
+                </div>
+
+                <h3>Running Your Tests</h3>
+                <div class="code-block">
+<span class="comment"># Run all tests</span>
+pytest
+
+<span class="comment"># Run specific test file</span>
+pytest tests/test_login.py
+
+<span class="comment"># Run with HTML report</span>
+pytest --html=reports/report.html
+
+<span class="comment"># Run with verbose output</span>
+pytest -v
+
+<span class="comment"># Run specific test</span>
+pytest tests/test_login.py::test_valid_login
+                </div>
+
+                <h3>Bonus Challenges</h3>
+                <ul>
+                    <li>Add parallel test execution using pytest-xdist</li>
+                    <li>Implement data-driven testing with CSV/JSON files</li>
+                    <li>Add integration with GitHub Actions for CI/CD</li>
+                    <li>Implement custom test reports with Allure</li>
+                    <li>Add cross-browser testing (Chrome, Firefox, Edge)</li>
+                    <li>Create a test data factory for generating test data</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Tips for Success:</strong>
+                    <ul>
+                        <li>Start with one test suite at a time</li>
+                        <li>Test frequently as you build</li>
+                        <li>Keep locators organized and maintainable</li>
+                        <li>Use meaningful test and method names</li>
+                        <li>Handle exceptions gracefully</li>
+                        <li>Add comments to explain complex logic</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
